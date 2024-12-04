@@ -3,8 +3,6 @@ services:
     build:
       context: .
     container_name: subscription-xray
-    ports:
-      - "8000:8000"
     volumes:
       - /home/vilyzo/subscription_api/app.log:/app/app.log
       - /home/vilyzo/subscription_api/clients.db:/app/clients.db
