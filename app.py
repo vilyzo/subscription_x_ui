@@ -37,10 +37,5 @@ async def send_sub(sub_id: str, auto_update: bool = False, update_interval: int 
     uuid = client_data["uuid"]
     email = client_data["email"]
     key = f'vless://{uuid}@{SERVER_ADDRESS}:{PORT}?type=tcp&security=reality&pbk={PUBLIC_KEY}&fp={FP}&sni={SNI}&sid=9b534a13&spx=%2F&flow=xtls-rprx-vision#{email}'
-    subscription_data = {
-        "key": key,
-        "auto_update": auto_update,
-        "update_interval": update_interval,
-    }
-    # return encoder.encode(key)
-    return subscription_data
+
+    return encoder.encode(key)
