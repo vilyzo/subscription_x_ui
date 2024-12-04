@@ -28,7 +28,7 @@ encoder = Base64Encoder()
 
 
 @app.get("/sub/{sub_id}", response_class=PlainTextResponse)
-async def send_sub(sub_id: str):
+async def send_sub(sub_id: str, auto_update: bool = False, update_interval: int = 10):
     await db.connect()
     client_data = await db.get_data_by_sub_id(sub_id)
     await db.close()
@@ -37,5 +37,10 @@ async def send_sub(sub_id: str):
     uuid = client_data["uuid"]
     email = client_data["email"]
     key = f'vless://{uuid}@{SERVER_ADDRESS}:{PORT}?type=tcp&security=reality&pbk={PUBLIC_KEY}&fp={FP}&sni={SNI}&sid=9b534a13&spx=%2F&flow=xtls-rprx-vision#{email}'
-
-    return encoder.encode(key)
+    subscription_data = {
+        "key": key,
+        "auto_update": auto_update,
+        "update_interval": update_interval,
+    }
+    # return encoder.encode(key)
+    return subscription_data
