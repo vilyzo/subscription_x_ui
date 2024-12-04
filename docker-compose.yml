@@ -1,0 +1,18 @@
+services:
+  app:
+    build:
+      context: .
+    container_name: subscription-xray
+    ports:
+      - "8000:8000"
+    volumes:
+      - /home/vilyzo/subscription_api/app.log:/app/app.log
+      - /home/vilyzo/subscription_api/clients.db:/app/clients.db
+    environment:
+      DB_PATCH: "clients.db"
+      SERVER_ADDRESS: "futurevision.freemyip.com"
+      SERVER_PORT: "443"
+      PUBLIC_KEY: "BS5Yv5xIQ8aGlUmJRaYxye9f_yfrv-Q348tAPmJdaFs"
+      SID: "06d31f198f3dd6"
+      SNI: "google.com"
+      FP: "safari"
