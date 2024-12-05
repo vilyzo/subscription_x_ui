@@ -6,7 +6,7 @@ services:
     ports:
       - "8000:8000"
     volumes:
-      - /home/vilyzo/subscription_api/app.log:/app/app.log
+      - ./app.log:/app/app.log
       - /etc/x-ui/x-ui.db:/app/x-ui.db
     environment:
       DB_PATCH: "/app/x-ui.db"
