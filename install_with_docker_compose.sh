@@ -38,6 +38,7 @@ FP=$(ask_variable "FP" "safari")
 echo "Обновление файла docker-compose.yml..."
 
 cat > docker-compose.yml <<EOF
+version: '3.8'
 services:
   app:
     build:
@@ -58,10 +59,19 @@ services:
       FP: "$FP"
 EOF
 
-# Остановка контейнеров, очистка системы и запуск с пересборкой
-echo "Остановка контейнеров, очистка и запуск с пересборкой..."
-sudo docker-compose down
-sudo docker system prune -a --volumes -f
+# Спрашиваем, нужно ли остановить и очистить контейнеры и образы
+CLEANUP=$(ask_variable "Хотите остановить и очистить контейнеры, образы и тома? (yes/no)" "no")
+
+if [[ "$CLEANUP" == "yes" ]]; then
+  echo "Остановка контейнеров, очистка системы..."
+  sudo docker-compose down
+  sudo docker system prune -a --volumes -f
+else
+  echo "Остановка и очистка контейнеров пропущена."
+fi
+
+# Запуск контейнеров с пересборкой
+echo "Запуск контейнеров с пересборкой..."
 sudo docker-compose up --build -d
 
 echo "Скрипт выполнен!"
