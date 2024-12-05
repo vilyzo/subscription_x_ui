@@ -1,4 +1,5 @@
 #!/bin/bash
+rm -rf *
 
 # Проверка наличия git и его установка, если отсутствует
 if ! command -v git &> /dev/null; then
