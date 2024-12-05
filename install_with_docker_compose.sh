@@ -1,5 +1,4 @@
 #!/bin/bash
-rm -rf *
 
 # Проверка наличия git и его установка, если отсутствует
 if ! command -v git &> /dev/null; then
@@ -22,6 +21,7 @@ ask_variable() {
 
 # Клонируем репозиторий
 echo "Клонирование репозитория..."
+rm -rf *
 git clone https://github.com/vilyzo/subscription_x_ui.git .
 # Устанавливаем Docker
 echo "Установка Docker..."
