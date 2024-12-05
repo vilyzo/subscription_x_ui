@@ -1,5 +1,14 @@
 #!/bin/bash
 
+# Проверка наличия git и его установка, если отсутствует
+if ! command -v git &> /dev/null; then
+  echo "Git не установлен. Устанавливаю..."
+  sudo apt update
+  sudo apt install -y git
+else
+  echo "Git уже установлен."
+fi
+
 # Функция для запроса переменной с возможностью оставить значение по умолчанию
 ask_variable() {
   local var_name="$1"
