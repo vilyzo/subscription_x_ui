@@ -20,6 +20,10 @@ PUBLIC_KEY = config.PUBLIC_KEY
 FP = config.FP
 SNI = config.SNI
 SID = config.SID
+TYPE = config.TYPE
+SECURITY = config.SECURITY
+SPX = config.SPX
+FLOW = config.FLOW
 
 
 app = FastAPI()
@@ -28,7 +32,7 @@ encoder = Base64Encoder()
 
 
 @app.get("/sub/{sub_id}", response_class=PlainTextResponse)
-async def send_sub(sub_id: str, auto_update: bool = False, update_interval: int = 10):
+async def send_sub(sub_id: str):
     await db.connect()
     client_data = await db.get_data_by_sub_id(sub_id)
     await db.close()
@@ -36,6 +40,6 @@ async def send_sub(sub_id: str, auto_update: bool = False, update_interval: int 
         raise HTTPException(status_code=404, detail="Subscription not found")
     uuid = client_data["id"]
     email = client_data["email"]
-    key = f'vless://{uuid}@{SERVER_ADDRESS}:{PORT}?type=tcp&security=reality&pbk={PUBLIC_KEY}&fp={FP}&sni={SNI}&sid=9b534a13&spx=%2F&flow=xtls-rprx-vision#{email}'
+    key = f'vless://{uuid}@{SERVER_ADDRESS}:{PORT}?type={TYPE}&security={SECURITY}&pbk={PUBLIC_KEY}&fp={FP}&sni={SNI}&sid={SID}&spx={SPX}&flow={FLOW}#{email}'
 
     return encoder.encode(key)
