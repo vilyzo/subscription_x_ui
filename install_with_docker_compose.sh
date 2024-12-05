@@ -21,8 +21,8 @@ ask_variable() {
 
 # Клонируем репозиторий
 echo "Клонирование репозитория..."
-git clone https://github.com/vilyzo/subscription_x_ui.git .
 cd subscription_x_ui
+git clone https://github.com/vilyzo/subscription_x_ui.git .
 # Устанавливаем Docker
 echo "Установка Docker..."
 sudo apt update
