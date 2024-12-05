@@ -7,12 +7,12 @@ services:
       - "8000:8000"
     volumes:
       - /home/vilyzo/subscription_api/app.log:/app/app.log
-      - /home/vilyzo/subscription_api/clients.db:/app/clients.db
+      - /etc/x-ui/x-ui.db:/app/x-ui.db
     environment:
-      DB_PATCH: "clients.db"
-      SERVER_ADDRESS: "futurevision.freemyip.com"
+      DB_PATCH: "/app/x-ui.db"
+      SERVER_ADDRESS: "834572350.duckdns.org"
       SERVER_PORT: "443"
-      PUBLIC_KEY: "BS5Yv5xIQ8aGlUmJRaYxye9f_yfrv-Q348tAPmJdaFs"
-      SID: "06d31f198f3dd6"
-      SNI: "apple.com"
+      PUBLIC_KEY: "FNaVxy1hPV40Xtm0OnoxqsxSNuQoLmWILUT6FwsdUmI"
+      SID: "c2&spx=%2F"
+      SNI: "google.com"
       FP: "safari"

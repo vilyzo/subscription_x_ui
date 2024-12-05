@@ -34,7 +34,7 @@ async def send_sub(sub_id: str, auto_update: bool = False, update_interval: int 
     await db.close()
     if client_data is None:
         raise HTTPException(status_code=404, detail="Subscription not found")
-    uuid = client_data["uuid"]
+    uuid = client_data["id"]
     email = client_data["email"]
     key = f'vless://{uuid}@{SERVER_ADDRESS}:{PORT}?type=tcp&security=reality&pbk={PUBLIC_KEY}&fp={FP}&sni={SNI}&sid=9b534a13&spx=%2F&flow=xtls-rprx-vision#{email}'
 
