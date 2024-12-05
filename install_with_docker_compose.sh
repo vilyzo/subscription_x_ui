@@ -59,15 +59,29 @@ services:
       FP: "$FP"
 EOF
 
-# Спрашиваем, нужно ли остановить и очистить контейнеры и образы
-CLEANUP=$(ask_variable "Хотите остановить и очистить контейнеры, образы и тома? (yes/no)" "no")
+# Спрашиваем, нужно ли остановить и очистить контейнеры, образы и тома
+CLEANUP=$(ask_variable "Хотите остановить и очистить контейнеры, образы и тома данного проекта? (yes/no)" "no")
 
 if [[ "$CLEANUP" == "yes" ]]; then
-  echo "Остановка контейнеров, очистка системы..."
+  echo "Остановка и очистка контейнеров, образов и томов проекта..."
+
+  # Останавливаем и удаляем только связанные с проектом контейнеры
   sudo docker-compose down
-  sudo docker system prune -a --volumes -f
+
+  # Удаляем только связанные с проектом образы
+  PROJECT_IMAGES=$(docker images --filter "label=com.docker.compose.project=$(basename $PWD)" -q)
+  if [[ ! -z "$PROJECT_IMAGES" ]]; then
+    sudo docker rmi $PROJECT_IMAGES
+  fi
+
+  # Удаляем тома, связанные только с этим проектом
+  PROJECT_VOLUMES=$(docker volume ls --filter "label=com.docker.compose.project=$(basename $PWD)" -q)
+  if [[ ! -z "$PROJECT_VOLUMES" ]]; then
+    sudo docker volume rm $PROJECT_VOLUMES
+  fi
+
 else
-  echo "Остановка и очистка контейнеров пропущена."
+  echo "Остановка и очистка контейнеров, образов и томов пропущена."
 fi
 
 # Запуск контейнеров с пересборкой
