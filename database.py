@@ -28,24 +28,25 @@ class Database:
     async def get_data_by_sub_id(self, sub_id):
         try:
             async with self.connection.execute(
-                    "SELECT settings FROM inbounds WHERE json_extract(settings, '$.clients[0].subId') = ?", (sub_id,)
+                    """
+                    SELECT 
+                        json_extract(client.value, '$.id') AS client_id,
+                        json_extract(client.value, '$.email') AS client_email
+                    FROM 
+                        inbounds,
+                        json_each(json_extract(settings, '$.clients')) AS client
+                    WHERE 
+                        json_extract(client.value, '$.subId') = ?
+                    """, (sub_id,)
             ) as cursor:
                 result = await cursor.fetchone()
                 if result:
-                    settings = json.loads(result[0])
-                    for client in settings.get("clients", []):
-                        if client["subId"] == sub_id:
-                            client_id = client.get("id")
-                            if client_id is None:
-                                logging.error(f"ID not found for client: {client}")
-                                return {"error": "ID not found for this client"}
-                            logging.info(f"Client found: id={client_id}, email={client['email']}")
-                            return {"id": client_id, "email": client["email"]}
+                    client_id, client_email = result
+                    logging.info(f"Client found: id={client_id}, email={client_email}")
+                    return {"id": client_id, "email": client_email}
+                else:
                     logging.warning(f"No client found with sub_id {sub_id}")
                     return {"error": "No client found with the given sub_id"}
-                else:
-                    logging.warning(f"No data found for sub_id {sub_id}")
-                    return {"error": "No data found for the given sub_id"}
         except Exception as e:
             logging.error(f"Failed to fetch data by sub_id: {e}")
             return {"error": f"Failed to fetch data: {e}"}
