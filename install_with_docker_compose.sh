@@ -26,19 +26,19 @@ sudo apt install -y docker-compose
 # Запрос переменных с возможностью изменить или оставить по умолчанию
 echo "Настройка переменных среды..."
 
-DB_PATCH=$(ask_variable "DB_PATCH" "/app/x-ui.db")
+DB_PATCH=$(ask_variable "DB_PATCH (путь внутри контейнера)" "/app/x-ui.db")
 SERVER_ADDRESS=$(ask_variable "SERVER_ADDRESS" "834572350.duckdns.org")
 SERVER_PORT=$(ask_variable "SERVER_PORT" "443")
 PUBLIC_KEY=$(ask_variable "PUBLIC_KEY" "FNaVxy1hPV40Xtm0OnoxqsxSNuQoLmWILUT6FwsdUmI")
 SID=$(ask_variable "SID" "c2&spx=%2F")
 SNI=$(ask_variable "SNI" "google.com")
 FP=$(ask_variable "FP" "safari")
+HOST_DB_PATH=$(ask_variable "HOST_DB_PATH (путь к файлу базы данных на хосте)" "/etc/x-ui/x-ui.db")
 
 # Замена переменных в docker-compose.yml
 echo "Обновление файла docker-compose.yml..."
 
 cat > docker-compose.yml <<EOF
-version: '3.8'
 services:
   app:
     build:
@@ -47,8 +47,8 @@ services:
     ports:
       - "8000:8000"
     volumes:
-      - /home/vilyzo/subscription_api/app.log:/app/app.log
-      - /etc/x-ui/x-ui.db:/app/x-ui.db
+      - ./app.log:/app/app.log
+      - $HOST_DB_PATH:$DB_PATCH
     environment:
       DB_PATCH: "$DB_PATCH"
       SERVER_ADDRESS: "$SERVER_ADDRESS"
